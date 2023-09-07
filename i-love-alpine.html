@@ -1,0 +1,61 @@
+<html>
+
+<head>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+
+<body>
+  <h1 x-data="{ message: 'I ❤️ Alpine' }" x-text="message"></h1>
+
+  <!-- counter div: -->
+  <div x-data="{ count: 0 }">
+    <button x-on:click="count++">Increment</button>
+    <button x-on:click="count = -1">Reset</button>
+
+    <span x-text="count"></span>
+  </div>
+  <button x-on:click="count = -2">reset outside of div</button>
+
+  <hr />
+  <div x-data="
+      {
+      foo: 'foo-parent' ,
+      bar: 'bar-parent' ,
+      baz: 'baz-parent' ,
+      specialMethod() {
+        this = {
+          ...this,
+          secret: 'you activated my SUPER special method'
+        }
+        console.log(`Special Method Called`)
+        console.info(`${this?.secret ?? 'no secret field' }`)
+        console.log(`Obj = ${JSON.stringify(this,null,2)}`)
+      }
+      }
+      ">
+    <span x-text="foo"><!-- Will output: "bar" --></span>
+
+    <div x-data="{ baz: 'NEWLY ADJUSTED IN SECOND CHILD' }">
+      <span x-text="bar"><!-- Will output: "bar" --></span>
+      <span x-text="baz"><!-- Will output: "bar" --></span>
+
+      <p>
+        <span>Your Secret is: </span>
+        <span x-text="obj?.secret ?? '_______' "></span>
+        <button x-on:click="console.log('clicked') || obj.specialMethod()">
+          Reveal Secret
+        </button>
+      </p>
+      <p>
+        <span>Obj = </span>
+        <span style="white-space: pre-wrap" x-text="JSON.stringify(obj,null,2)">Obj = </span>
+      </p>
+
+      <div>
+        <span x-text="baz"><!-- Will output: "bob" --></span>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
