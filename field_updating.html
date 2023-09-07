@@ -5,32 +5,15 @@
 </head>
 
 <body>
-  <div x-data="obj= Alpine.reactive(
-      {
-      foo: 'foo-parent' ,
-      bar: 'bar-parent' ,
-      baz: 'baz-parent' ,
-      specialMethod() {
-        this = {
-          ...this,
-          secret: 'you activated my SUPER special method'
-        }
-        console.log(`Special Method Called`)
-        console.info(`${this?.secret ?? 'no secret field' }`)
-        console.log(`Obj = ${JSON.stringify(this,null,2)}`)
-      }
-      })
-      ">
-    <span x-text="foo"><!-- Will output: "bar" --></span>
-
-    <div x-data="{ baz: 'NEWLY ADJUSTED IN SECOND CHILD' }">
-      <span x-text="bar"><!-- Will output: "bar" --></span>
-      <span x-text="baz"><!-- Will output: "bar" --></span>
-
+  <div x-data="obj = getObject()">
+    <div>
+      <button x-on:click="obj.changeField()">
+        Change Field
+      </button>
       <p>
         <span>Your Secret is: </span>
         <span x-text="obj?.secret ?? '_______' "></span>
-        <button x-on:click="console.log('clicked') || obj.specialMethod()">
+        <button x-on:click="console.log('clicked') || obj.addSecret()">
           Reveal Secret
         </button>
       </p>
@@ -41,11 +24,21 @@
         <span style="white-space: pre-wrap" x-text="JSON.stringify(obj,null,2)">Obj = </span>
       </p>
 
-      <div>
-        <span x-text="baz"><!-- Will output: "bob" --></span>
-      </div>
     </div>
-  </div>
+    <script>
+      const getObject = () => {
+        return Alpine.reactive({
+          foo: "foo-getObject",
+          bar: "bar-getObject",
+          changeField() {
+            this.bar = "bar-CHANGED"
+          },
+          addSecret() {
+            this.secret = "[this is my special secret]"
+          }
+        })
+      }
+    </script>
 </body>
 
 </html>
